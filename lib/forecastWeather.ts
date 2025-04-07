@@ -19,13 +19,12 @@ export default async function forecastWeather(lat: number, lon: number): Promise
         .then((res) => res.json())
         .then(data => {
             const arr = [];
-            console.log(data);
             let i = 0;
             for (; i < data.list.length; i++) {
                 const date = new Date(data.list[i].dt * 1000);
                 if (date.getDate() !== new Date().getDate()) break;
             }
-            for (; i < data.list.length; i += 8) {
+            for (; i < data.list.length - 4; i += 8) {
                 const temp = searchTemp(data.list, i);
                 arr.push({
                     dt: data.list[i].dt * 1000,
