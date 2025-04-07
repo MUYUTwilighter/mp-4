@@ -19,6 +19,7 @@ export default async function forecastWeather(lat: number, lon: number): Promise
         .then((res) => res.json())
         .then(data => {
             const arr = [];
+            console.log(data);
             let i = 0;
             for (; i < data.list.length; i++) {
                 const date = new Date(data.list[i].dt * 1000);
