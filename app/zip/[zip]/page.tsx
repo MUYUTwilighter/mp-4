@@ -31,15 +31,19 @@ export default function WeatherPage() {
     </>;
     const [currentWeatherData, setCurrentWeatherData] = useState<CurrentWeatherData | null>(null);
     const [forecastData, setForecastData] = useState<Array<ForecastWeatherData> | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         queryGeo(zip.toString()).then(data => {
-            currentWeather(data.lat, data.lon).then(data => setCurrentWeatherData(data ? data : null));
-            forecastWeather(data.lat, data.lon).then(data => setForecastData(data ? data : null));
+            currentWeather(data.lat, data.lon).then(data => setCurrentWeatherData(data ? data : null)).catch(reason => setError(reason));
+            forecastWeather(data.lat, data.lon).then(data => setForecastData(data ? data : null)).catch(reason => setError(reason));
         })
     }, [zip]);
 
-    return <StyledContainer>
+    return error ? <>
+        <Typography variant="h1">Oops, service unavailable</Typography>
+        <Typography variant="h2">{error}</Typography>
+    </> : <StyledContainer>
         <CurrentWeather data={currentWeatherData}></CurrentWeather>
         <StyledForecast data={forecastData}></StyledForecast>
     </StyledContainer>;
